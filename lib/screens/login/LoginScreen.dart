@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fitness/model/login/user_model.dart';
 import 'package:fitness/screens/dashboard/dashboard_screen.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness/services/LoginService.dart';
 import 'package:provider/provider.dart';
@@ -126,51 +126,34 @@ class _LoginState extends State<LoginScreen> {
                           ),
                           isLoading
                               ? const CircularProgressIndicator()
-                              : InkWell(
-                                  onTap: () => {_proceed()},
-                                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileUi()));
-                                  child: Hero(
-                                    tag: "submit-button",
-                                    child: Container(
-                                      height: 55,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        gradient: const LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: [
-                                            /* Color(0xFF3383CD),
-                                        Color(0xFF11249F) */
-                                            Colors.black,
-                                            Colors.black
-                                          ],
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          "Login",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                              :    Container(
+                            margin: EdgeInsets.all(16),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  padding: EdgeInsets.all(16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(6.0),
+                                  child: Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        letterSpacing: 1),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _proceed();
+                                }),
+                          ),
                           const SizedBox(
                             height: 80,
-                          ),
-                          InkWell(
-                            onTap: () => {},
-                            child: const Text(
-                              "Create New Account",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -288,15 +271,17 @@ class _LoginState extends State<LoginScreen> {
   }
 
   _proceed() async {
+    _loggingIn(true);
     if (_formKey.currentState == null) {
+      _loggingIn(false);
       return;
     }
     if (!_formKey.currentState!.validate()) {
+      _loggingIn(false);
       return;
     }
     _formKey.currentState!.save();
     try {
-      _loggingIn(true);
       await Provider.of<LoginService>(context, listen: false)
           .login(UserModel(_email, _password));
       _loggingIn(false);
@@ -306,7 +291,7 @@ class _LoginState extends State<LoginScreen> {
         duration: Duration(seconds: 3),
         backgroundColor: Colors.green,
       )..show(context).then((value) => Navigator.push(context,
-          Slide(builder: (context) => const Dashboard(), settings: null)));
+          Slide(builder: (context) => const DashboardScreen(), settings: null)));
       _loggingIn(false);
     } catch (e) {
       _loggingIn(false);
@@ -319,6 +304,10 @@ class _LoginState extends State<LoginScreen> {
       print(e.toString());
     }
   }
-}
 
-void _loggingIn(bool loggingIn) {}
+  void _loggingIn(bool loggingIn) {
+    setState(() {
+      isLoading = loggingIn;
+    });
+  }
+}

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_screen/OnbordingData.dart';
 
+import '../../model/OnboardingData.dart';
 class IntroScreen extends StatefulWidget {
   final List<OnbordingData> onbordingDataList;
   final MaterialPageRoute pageRoute;
@@ -13,12 +12,12 @@ class IntroScreen extends StatefulWidget {
 
   @override
   IntroScreenState createState() {
-    return new IntroScreenState();
+    return IntroScreenState();
   }
 }
 
 class IntroScreenState extends State<IntroScreen> {
-  final PageController controller = new PageController();
+  final PageController controller = PageController();
   int currentPage = 0;
   bool lastPage = false;
 
@@ -48,7 +47,25 @@ class IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: new Color(0xFFEEEEEE),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.8),
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(0, 0), // changes position of shadow
+            ),
+          ],
+          image: DecorationImage(
+            image: const AssetImage("assets/images/two.jpg"),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.2),
+              BlendMode.dstATop,
+            ),
+          )),
       padding: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,7 +91,7 @@ class IntroScreenState extends State<IntroScreen> {
                 TextButton(
                   child: Text(lastPage ? "" : "SKIP",
                       style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0)),
                   onPressed: () => lastPage
@@ -98,7 +115,7 @@ class IntroScreenState extends State<IntroScreen> {
                 TextButton(
                   child: Text(lastPage ? "GOT IT" : "NEXT",
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0)),
                   onPressed: () => lastPage

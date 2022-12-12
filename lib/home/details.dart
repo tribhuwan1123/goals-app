@@ -1,13 +1,25 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class Details extends StatelessWidget {
+class Details extends StatefulWidget {
+  String about;
+  String services;
+  String price;
+
+  Details(this.about, this.services, this.price);
+
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     final CarouselController _controller = CarouselController();
 
     return CarouselSlider(
       options: CarouselOptions(
+        height: 300,
         aspectRatio: 1.5,
         scrollDirection: Axis.horizontal,
       ),
@@ -15,65 +27,61 @@ class Details extends StatelessWidget {
       items: imageSliders(),
     );
   }
-}
 
-final List<Widget> imageSlider = [];
+  final List<Widget> imageSlider = [];
 
-List<Widget> imageSliders() {
-  imageSlider.add(Column(
-    children: [
-      DetailTile("About Us",
-          "Lorem Ipsum, sometimes referred to as 'lipsum', is the placeholder text used in design when creating content. It helps designers plan out where the content will sit, without needing to wait for the content to be written and approved. It originally comes from a Latin text, but to today's reader, it's seen as gibberish."),
-    ],
-  ));
+  List<Widget> imageSliders() {
+    imageSlider.add(Column(
+      children: [DetailTile("About Us", widget.about)],
+    ));
 
-  imageSlider.add(Column(
-    children: [
-      DetailTile("Services",
-          "Lorem Ipsum, sometimes referred to as 'lipsum', is the placeholder text used in design when creating content. It helps designers plan out where the content will sit, without needing to wait for the content to be written and approved. It originally comes from a Latin text, but to today's reader, it's seen as gibberish."),
-    ],
-  ));
-  imageSlider.add(Column(
-    children: [
-      DetailTile("Pricing",
-          "Lorem Ipsum, sometimes referred to as 'lipsum', is the placeholder text used in design when creating content. It helps designers plan out where the content will sit, without needing to wait for the content to be written and approved. It originally comes from a Latin text, but to today's reader, it's seen as gibberish."),
-    ],
-  ));
-  return imageSlider;
-}
+    imageSlider.add(Column(
+      children: [DetailTile("Services", widget.services)],
+    ));
+    imageSlider.add(Column(
+      children: [DetailTile("Pricing", widget.price)],
+    ));
+    return imageSlider;
+  }
 
-Widget DetailTile(String title, String content) {
-  return Container(
-    margin: const EdgeInsets.all(8),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white, width: 1)),
-    child: Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(8),
-          child: Center(
-              child: Text(
-            title,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          )),
-        ),
-        const Divider(
-          color: Colors.white,
-          height: 2,
-        ),
-        Container(
-          padding: EdgeInsets.all(8),
-          child: Text(
-            content,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
+  Widget DetailTile(String title, String content) {
+    return Container(
+      height: 250,
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.white, width: 1)),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            child: Center(
+                child: Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            )),
           ),
-        )
-      ],
-    ),
-  );
+          const Divider(
+            color: Colors.white,
+            height: 2,
+          ),
+          Container(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              content,
+              overflow: TextOverflow.visible,
+              maxLines: 5,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
